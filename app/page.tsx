@@ -23,11 +23,12 @@ export default function Home() {
           text-align: center; /* Centré sur ordinateur */
         }
         .section-title {
-          text-align: center; /* Centrage forcé des grands titres */
+          text-align: center !important; /* Centrage forcé de tous les grands titres */
           font-size: 2.5rem;
           font-weight: 900;
           text-transform: uppercase;
           margin-bottom: 50px;
+          color: ${darkColor};
         }
         
         /* Grilles fluides automatiques */
@@ -40,6 +41,26 @@ export default function Home() {
           height: 400px;
         }
 
+        /* Effet de survol élégant sur les cartes de services cliquables */
+        .service-card {
+          background-color: white; 
+          padding: 30px; 
+          borderRadius: 4px; 
+          boxShadow: 0 5px 15px rgba(0,0,0,0.05); 
+          borderTop: 5px solid ${primaryColor};
+          textDecoration: none;
+          display: block;
+          transition: transform 0.3s ease, boxShadow 0.3s ease;
+          cursor: pointer;
+        }
+        .service-card:hover {
+          transform: translateY(-5px);
+          boxShadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .service-card:hover h4 {
+          color: ${primaryColor} !important;
+        }
+
         /* ======= 📱 ADAPTATION MOBILE (Écrans de moins de 768px) ======= */
         @media (max-width: 768px) {
           .section-padding {
@@ -47,11 +68,10 @@ export default function Home() {
           }
           .hero-title {
             font-size: 2.2rem !important;
-            text-align: center; /* Reste centré sur mobile */
+            text-align: center;
           }
           .section-title {
             font-size: 1.8rem !important;
-            text-align: center;
             margin-bottom: 30px;
           }
           .diaspora-image {
@@ -63,7 +83,10 @@ export default function Home() {
             max-width: none !important;
           }
           .diaspora-text-block {
-            text-align: center; /* Centre aussi le texte de présentation sur mobile si besoin */
+            text-align: center; /* Centre le texte de présentation sur mobile */
+          }
+          .simulation-block {
+            text-align: center; /* Centre la section simulation sur mobile */
           }
         }
       `}</style>
@@ -110,24 +133,48 @@ export default function Home() {
       </section>
 
       {/* =========================================================
-          2. SECTION SERVICES
+          2. SECTION SERVICES (CLIQUABLES - ROUTES EXPERTISES)
           ========================================================= */}
       <section id="services" className="section-padding" style={{ backgroundColor: lightGrey }}>
-        <h3 className="section-title" style={{ color: darkColor }}>
+        <h3 className="section-title">
           Nos <span style={{ color: primaryColor, backgroundColor: darkColor, padding: '0 15px' }}>Services</span>
         </h3>
         
         <div className="grid-services">
           {[
-            { t: 'Gros Œuvre', d: 'Construction de structures robustes, fondations durables et élévations de bâtiments.', i: '🏗️' },
-            { t: 'Second Œuvre', d: 'Finitions de haute qualité, plâtrerie, électricité, carrelage et plomberie.', i: '🛠️' },
-            { t: 'Rénovation', d: 'Modernisation, extension et réhabilitation complète de vos bâtiments existants.', i: '🏠' }
+            { 
+              t: 'Gros Œuvre', 
+              d: 'Construction de structures robustes, fondations durables et élévations de bâtiments.', 
+              i: '🏗️',
+              url: '/expertises/gros-oeuvre'
+            },
+            { 
+              t: 'Second Œuvre', 
+              d: 'Finitions de haute qualité, plâtrerie, électricité, carrelage et plomberie.', 
+              i: '🛠️',
+              url: '/expertises/second-oeuvre'
+            },
+            { 
+              t: 'Rénovation', 
+              d: 'Modernisation, extension et réhabilitation complète de vos bâtiments existants.', 
+              i: '🏠',
+              url: '/expertises/renovation'
+            }
           ].map((s, idx) => (
-            <div key={idx} style={{ backgroundColor: 'white', padding: '30px', borderRadius: '4px', boxShadow: '0 5px 15px rgba(0,0,0,0.05)', borderTop: `5px solid ${primaryColor}` }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '15px' }}>{s.i}</div>
-              <h4 style={{ fontSize: '1.4rem', marginBottom: '10px', color: darkColor }}>{s.t}</h4>
-              <p style={{ color: '#666', lineHeight: '1.6', margin: 0 }}>{s.d}</p>
-            </div>
+            <Link href={s.url} key={idx} style={{ textDecoration: 'none' }}>
+              <div className="service-card">
+                <div style={{ fontSize: '2.5rem', marginBottom: '15px' }}>{s.i}</div>
+                <h4 style={{ fontSize: '1.4rem', marginBottom: '10px', color: darkColor, transition: '0.3s', margin: '10px 0' }}>
+                  {s.t}
+                </h4>
+                <p style={{ color: '#666', lineHeight: '1.6', margin: 0, fontSize: '0.95rem' }}>
+                  {s.d}
+                </p>
+                <div style={{ marginTop: '20px', color: darkColor, fontWeight: 'bold', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  En savoir plus <span style={{ color: primaryColor }}>➔</span>
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -143,13 +190,13 @@ export default function Home() {
               CONSTRUISEZ AU MALI EN TOUTE SÉRÉNITÉ
             </h3>
             <p style={{ lineHeight: '1.8', color: '#555', fontSize: '1.05rem', marginBottom: '20px' }}>
-              Chez <strong>Setra Groupe</strong>, nous comprenons parfaitement les craintes de la diaspora. Investir à distance exige une transparence totale et un suivi irréprochable.
+              Chez <strong>Setra Groupe</strong>, nous comprenons parfaitement les craintes de la diaspora. Investir à distance dans l'immobilier exige une confiance absolue, une transparence totale et un suivi technique aux normes.
             </p>
             <p style={{ lineHeight: '1.8', color: '#555', fontSize: '1.05rem', marginBottom: '30px' }}>
-              Nous vous évitons les quiproquos financiers en vous fournissant des rapports de chantier digitaux réguliers (photos et vidéos) et un contrôle rigoureux des dépenses.
+              Nous vous évitons les intermédiaires familiaux parfois sources de quiproquos, en vous proposant des rapports de chantier digitaux réguliers (photos et vidéos) et un contrôle rigoureux des dépenses.
             </p>
             
-            <Link href="/contact" style={{ textDecoration: 'none' }}>
+            <Link href="/contact" style={{ textDecoration: 'none', display: 'inline-block', width: '100%' }}>
               <button className="btn-responsive" style={{
                 backgroundColor: darkColor,
                 color: 'white',
@@ -180,7 +227,7 @@ export default function Home() {
           4. SECTION RÉALISATIONS
           ========================================================= */}
       <section id="realisations" className="section-padding" style={{ backgroundColor: darkColor, color: 'white' }}>
-        <h3 className="section-title">
+        <h3 className="section-title" style={{ color: 'white' }}>
           Nos <span style={{ color: primaryColor }}>Réalisations</span>
         </h3>
         
@@ -208,7 +255,7 @@ export default function Home() {
         </div>
         
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Link href="/nosrealisation" style={{ textDecoration: 'none' }}>
+          <Link href="/nosrealisation" style={{ textDecoration: 'none', display: 'flex', justifyContent: 'center', width: '100%' }}>
             <button className="btn-responsive" style={{
               backgroundColor: 'transparent',
               color: primaryColor,
@@ -227,12 +274,49 @@ export default function Home() {
       </section>
 
       {/* =========================================================
-          5. SECTION TÉMOIGNAGES
+          5. SECTION SIMULATION (OUTIL DE CONFIGURATION)
           ========================================================= */}
-      <section id="temoignages" className="section-padding" style={{ backgroundColor: lightGrey }}>
-        <h3 className="section-title" style={{ color: darkColor }}>
-          Avis de la <span style={{ color: primaryColor, backgroundColor: darkColor, padding: '0 10px' }}>Diaspora</span>
-        </h3>
+      <section className="section-padding" style={{ backgroundColor: lightGrey, borderLeft: `8px solid ${primaryColor}` }}>
+        <div className="simulation-block" style={{ maxWidth: '800px' }}>
+          <span style={{ color: '#666', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '0.85rem', letterSpacing: '1px' }}>Outil de simulation</span>
+          <h3 style={{ fontSize: '2.2rem', color: darkColor, marginTop: '5px', marginBottom: '15px', fontWeight: '900', lineHeight: '1.2' }}>
+            UNE NOUVELLE MANIÈRE D'ÉVALUER VOS PROJETS
+          </h3>
+          <p style={{ color: '#555', fontSize: '1.05rem', lineHeight: '1.7', marginBottom: '25px' }}>
+            Découvrez notre tout nouveau système de configuration. Plus rapide et mieux adapté aux critères techniques modernes du bâtiment, il vous permet de définir précisément l'envergure de vos travaux en quelques clics.
+          </p>
+          
+          <Link href="/verificateur-de-conformite" style={{ textDecoration: 'none', display: 'inline-block', width: '100%' }}>
+            <button className="btn-responsive" style={{
+              backgroundColor: primaryColor,
+              color: darkColor,
+              padding: '15px 35px',
+              border: `2px solid ${darkColor}`,
+              fontWeight: 'bold',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              textTransform: 'uppercase',
+              borderRadius: '4px',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+              width: '100%',
+              maxWidth: '320px'
+            }}>
+              Vérificateur de conformité →
+            </button>
+          </Link>
+        </div>
+      </section>
+
+      {/* =========================================================
+          6. SECTION TÉMOIGNAGES
+          ========================================================= */}
+      <section id="temoignages" className="section-padding" style={{ backgroundColor: 'white' }}>
+        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+          <span style={{ color: '#666', fontWeight: 'bold', letterSpacing: '1px', textTransform: 'uppercase' }}>La parole à nos clients</span>
+          <h3 className="section-title" style={{ marginTop: '5px' }}>
+            Avis de la <span style={{ color: primaryColor, backgroundColor: darkColor, padding: '0 10px' }}>Diaspora</span>
+          </h3>
+        </div>
 
         <div className="grid-temoignages">
           {[
@@ -264,6 +348,43 @@ export default function Home() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* =========================================================
+          7. SECTION APPEL À L'ACTION FINAL
+          ========================================================= */}
+      <section className="section-padding" style={{ 
+        backgroundColor: darkColor, 
+        textAlign: 'center', 
+        borderTop: `5px solid ${primaryColor}`
+      }}>
+        <h3 style={{ color: 'white', fontSize: '2.5rem', fontWeight: '900', marginBottom: '20px', textTransform: 'uppercase', lineHeight: '1.2' }}>
+          Prêt à lancer votre projet de construction au Mali ?
+        </h3>
+        <p style={{ color: '#aaa', fontSize: '1.1rem', maxWidth: '700px', margin: '0 auto 40px auto', lineHeight: '1.6' }}>
+          Obtenez une estimation budgétaire claire et détaillée pour votre future villa, immeuble ou rénovation à Bamako et alentours.
+        </p>
+        
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Link href="/contact" style={{ width: '100%', textDecoration: 'none', display: 'flex', justifyContent: 'center' }}>
+            <button className="btn-responsive" style={{
+              backgroundColor: primaryColor,
+              color: darkColor,
+              padding: '18px 45px',
+              border: 'none',
+              fontWeight: '900',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              textTransform: 'uppercase',
+              borderRadius: '4px',
+              boxShadow: '0 5px 20px rgba(0,0,0,0.5)',
+              width: '100%',
+              maxWidth: '350px'
+            }}>
+              Demander un devis maintenant
+            </button>
+          </Link>
         </div>
       </section>
 
