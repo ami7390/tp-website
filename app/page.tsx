@@ -1,4 +1,5 @@
-// Ajoute l'import en haut
+'use client';
+
 import Link from 'next/link';
 import React from 'react';
 
@@ -10,7 +11,7 @@ export default function Home() {
   return (
     <main style={{ fontFamily: 'Arial, sans-serif', backgroundColor: 'white', overflowX: 'hidden' }}>
       
-      {/* Injection de styles responsives globaux pour gérer les grilles et espacements */}
+      {/* Styles responsives pour le contenu de la page */}
       <style>{`
         .section-padding {
           padding: 80px 10%;
@@ -18,32 +19,32 @@ export default function Home() {
         .hero-title {
           font-size: 3.5rem;
         }
-        .grid-services, .grid-diaspora, .grid-realisations, .grid-temoignages {
-          display: grid;
-          gap: 30px;
-        }
-        .grid-services { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-        .grid-diaspora { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-        .grid-realisations { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .grid-temoignages { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        .grid-services { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .grid-diaspora { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 50px; }
+        .grid-realisations { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .grid-temoignages { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         
         .diaspora-image {
           height: 400px;
         }
 
-        /* ======= MEDIA QUERIES POUR MOBILE ======= */
         @media (max-width: 768px) {
           .section-padding {
-            padding: 40px 5% !important; /* Moins d'espace sur les côtés sur mobile */
+            padding: 50px 5% !important;
           }
           .hero-title {
-            font-size: 2rem !important; /* Texte plus petit pour éviter qu'il déborde */
+            font-size: 2rem !important;
           }
           .diaspora-image {
-            height: 250px !important; /* Image moins haute sur mobile */
+            height: 250px !important;
+            grid-row: 1;
           }
           h3 {
-            font-size: 1.6rem !important; /* Titres de section adaptés */
+            font-size: 1.7rem !important;
+          }
+          .btn-responsive {
+            width: 100% !important;
+            max-width: none !important;
           }
         }
       `}</style>
@@ -60,27 +61,28 @@ export default function Home() {
         alignItems: 'center',
         color: 'white',
         textAlign: 'center',
-        padding: '40px 20px'
+        padding: '60px 20px'
       }}>
         <h2 className="hero-title" style={{ marginBottom: '15px', textTransform: 'uppercase', fontWeight: '900', maxWidth: '900px', lineHeight: '1.2' }}>
           NOUS CONSTRUISONS VOTRE AVENIR
         </h2>
-        <p style={{ fontSize: '1.2rem', marginBottom: '35px', color: primaryColor, fontWeight: 'bold' }}>
+        <p style={{ fontSize: '1.3rem', marginBottom: '35px', color: primaryColor, fontWeight: 'bold' }}>
           Expertise, Sécurité, Solidité.
         </p>
         
-        <Link href="/devis">
-          <button style={{
+        <Link href="/devis" style={{ width: '100%', display: 'flex', justifyContent: 'center', textDecoration: 'none' }}>
+          <button className="btn-responsive" style={{
             backgroundColor: primaryColor,
             color: darkColor,
-            padding: '16px 40px',
+            padding: '18px 45px',
             border: 'none',
             fontWeight: 'bold',
-            fontSize: '1rem',
+            fontSize: '1.1rem',
             cursor: 'pointer',
             textTransform: 'uppercase',
             boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
-            transition: '0.3s'
+            transition: '0.3s',
+            maxWidth: '300px'
           }}>
             Démarrer mon projet
           </button>
@@ -95,7 +97,7 @@ export default function Home() {
         <div className="grid-services">
           {[
             { t: 'Gros Œuvre', d: 'Construction de structures robustes et fondations durables.', i: '🏗️' },
-            { t: 'Second Œuvre', d: 'Finitions de haute quality, électricité et plomberie.', i: '🛠️' },
+            { t: 'Second Œuvre', d: 'Finitions de haute qualité, électricité et plomberie.', i: '🛠️' },
             { t: 'Rénovation', d: 'Modernisation et réhabilitation de vos bâtiments.', i: '🏠' }
           ].map((s, idx) => (
             <div key={idx} style={{ backgroundColor: 'white', padding: '30px', borderRadius: '4px', boxShadow: '0 5px 15px rgba(0,0,0,0.05)', borderTop: `5px solid ${primaryColor}` }}>
@@ -122,8 +124,8 @@ export default function Home() {
               Nous vous évitons les intermédiaires familiaux parfois sources de quiproquos, en vous proposant des rapports de chantier digitaux hebdomadaires, des photos, des vidéos et un suivi technique aux normes internationales.
             </p>
             
-            <Link href="/garantie">
-              <button style={{
+            <Link href="/garantie" style={{ textDecoration: 'none' }}>
+              <button className="btn-responsive" style={{
                 backgroundColor: darkColor,
                 color: 'white',
                 padding: '15px 35px',
@@ -180,8 +182,8 @@ export default function Home() {
         </div>
         
         <div style={{ textAlign: 'center' }}>
-          <Link href="/nosrealisation">
-            <button style={{
+          <Link href="/nosrealisation" style={{ textDecoration: 'none' }}>
+            <button className="btn-responsive" style={{
               backgroundColor: 'transparent',
               color: primaryColor,
               border: `2px solid ${primaryColor}`,
@@ -208,8 +210,8 @@ export default function Home() {
             Découvrez notre tout nouveau système de configuration. Plus rapide et mieux adapté aux critères techniques modernes du bâtiment, il vous permet de définir précisément l'envergure de vos travaux en quelques clics.
           </p>
           
-          <Link href="/verificateur-de-conformite">
-            <button style={{
+          <Link href="/verificateur-de-conformite" style={{ textDecoration: 'none' }}>
+            <button className="btn-responsive" style={{
               backgroundColor: primaryColor,
               color: darkColor,
               padding: '15px 35px',
@@ -287,24 +289,26 @@ export default function Home() {
           Obtenez une estimation budgétaire claire et détaillée pour votre future villa, immeuble ou rénovation à Bamako et alentours.
         </p>
         
-        <Link href="/devis">
-          <button style={{
-            backgroundColor: primaryColor,
-            color: darkColor,
-            padding: '18px 45px',
-            border: 'none',
-            fontWeight: '900',
-            fontSize: '1rem',
-            cursor: 'pointer',
-            textTransform: 'uppercase',
-            borderRadius: '4px',
-            boxShadow: '0 5px 20px rgba(0,0,0,0.5)',
-            width: '100%',
-            maxWidth: '350px'
-          }}>
-            Demander un devis maintenant
-          </button>
-        </Link>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Link href="/devis" style={{ width: '100%', textDecoration: 'none', display: 'flex', justifyContent: 'center' }}>
+            <button className="btn-responsive" style={{
+              backgroundColor: primaryColor,
+              color: darkColor,
+              padding: '18px 45px',
+              border: 'none',
+              fontWeight: '900',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              textTransform: 'uppercase',
+              borderRadius: '4px',
+              boxShadow: '0 5px 20px rgba(0,0,0,0.5)',
+              width: '100%',
+              maxWidth: '350px'
+            }}>
+              Demander un devis maintenant
+            </button>
+          </Link>
+        </div>
       </section>
 
     </main>
