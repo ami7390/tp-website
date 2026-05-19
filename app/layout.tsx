@@ -1,3 +1,6 @@
+'use client'; // Obligatoire pour gérer l'ouverture du menu mobile au clic
+
+import { useState } from 'react';
 import Link from 'next/link';
 
 export default function RootLayout({
@@ -5,48 +8,122 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const primaryColor = '#FFD700';
-  const darkColor = '#212121';
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const primaryColor = '#FFD700'; // Jaune BTP
+  const darkColor = '#212121';    // Anthracite
 
   return (
     <html lang="fr" style={{ scrollBehavior: 'smooth' }}>
       <body style={{ margin: 0, fontFamily: 'Arial, sans-serif', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         
-        {/* HEADER */}
+        {/* =========================================================
+            HEADER & NAVBAR RESPONSIVE INTÉGRÉE (ZÉRO IMPORT)
+            ========================================================= */}
         <header style={{
           backgroundColor: 'white',
-          padding: '0.8rem 10%',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: `4px solid ${primaryColor}`,
           position: 'sticky',
           top: 0,
           zIndex: 1000,
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          borderBottom: `4px solid ${primaryColor}`,
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            {/* Si tu n'as pas encore de logo.png, l'image affichera le alt */}
-            <img src="/logo.png" alt="Setra" style={{ height: '70px' }} />
-            <h1 style={{ margin: 0, fontSize: '1.5rem', color: darkColor, textTransform: 'uppercase', fontWeight: '900' }}>
-              Setra <span style={{ color: '#666', fontWeight: '300' }}>Groupe</span>
-            </h1>
+          {/* Centralisation de tous les styles media-queries (Navbar + Footer) */}
+          <style>{`
+            .header-container {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 0.8rem 10%;
+            }
+            .nav-links {
+              display: flex;
+              gap: 25px;
+              align-items: center;
+            }
+            .nav-link {
+              font-weight: bold;
+              text-decoration: none;
+              color: ${darkColor};
+              transition: 0.3s;
+            }
+            .nav-link:hover {
+              color: ${primaryColor};
+            }
+            .burger-btn {
+              display: none;
+              background: none;
+              border: none;
+              color: ${darkColor};
+              font-size: 1.8rem;
+              cursor: pointer;
+            }
+
+            /* ======= 📱 ADAPTATION TABLETTE & MOBILE ======= */
+            @media (max-width: 768px) {
+              .header-container {
+                padding: 0.8rem 5%;
+              }
+              .burger-btn {
+                display: block; /* On affiche l'icône burger */
+              }
+              .nav-links {
+                display: ${isMenuOpen ? 'flex' : 'none'}; /* Affiché uniquement si ouvert */
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                padding: 20px 0;
+                gap: 20px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                border-bottom: 3px solid ${primaryColor};
+              }
+              .nav-link {
+                width: 100%;
+                text-align: center;
+                padding: 10px 0;
+                font-size: 1.1rem;
+              }
+              footer {
+                padding: 40px 5% 20px 5% !important; /* Moins d'espace perdu sur mobile */
+              }
+            }
+          `}</style>
+
+          <div className="header-container">
+            {/* BLOC LOGO */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+              <img src="/logo.png" alt="Setra" style={{ height: '50px', objectFit: 'contain' }} />
+              <h1 style={{ margin: 0, fontSize: '1.4rem', color: darkColor, textTransform: 'uppercase', fontWeight: '900' }}>
+                Setra <span style={{ color: '#666', fontWeight: '300' }}>Groupe</span>
+              </h1>
+            </div>
+
+            {/* BOUTON BURGER (VISIBLE SUR MOBILE) */}
+            <button className="burger-btn" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu">
+              {isMenuOpen ? '✕' : '☰'}
+            </button>
+
+            {/* ONGLETS DE NAVIGATION */}
+            <nav className="nav-links">
+              <Link href="/" className="nav-link" onClick={() => setIsMenuOpen(false)}>Accueil</Link>
+              <Link href="/nosrealisation" className="nav-link" onClick={() => setIsMenuOpen(false)}>Réalisations</Link>
+              <Link href="/nosservices" className="nav-link" onClick={() => setIsMenuOpen(false)}>Services</Link>
+              <Link href="/apropos" className="nav-link" onClick={() => setIsMenuOpen(false)}>À Propos</Link>
+              <Link href="/contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+            </nav>
           </div>
-          <nav style={{ display: 'flex', gap: '25px' }}>
-            <Link href="/" style={{ fontWeight: 'bold', textDecoration: 'none', color: darkColor }}>Accueil</Link>
-            <Link href="/nosrealisation" style={{ fontWeight: 'bold', textDecoration: 'none', color: darkColor }}>Réalisations</Link>
-            <Link href="/nosservices" style={{ fontWeight: 'bold', textDecoration: 'none', color: darkColor }}>Services</Link>
-            <Link href="/apropos" style={{ fontWeight: 'bold', textDecoration: 'none', color: darkColor }}>À Propos</Link>
-            <Link href="/contact" style={{ fontWeight: 'bold', textDecoration: 'none', color: darkColor }}>Contact</Link>
-          </nav>
         </header>
 
-        {/* CONTENU PRINCIPAL (flex: 1 permet de pousser le footer en bas si la page est courte) */}
+        {/* CONTENU PRINCIPAL DE TES PAGES */}
         <main style={{ flex: 1 }}>
           {children}
         </main>
 
-        {/* FOOTER COMPLET */}
+        {/* =========================================================
+            FOOTER TOTALEMENT RESPONSIVE
+            ========================================================= */}
         <footer style={{ 
           backgroundColor: darkColor, 
           color: 'white', 
