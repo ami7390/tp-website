@@ -152,7 +152,7 @@ export default function Home() {
               t: 'Second Œuvre', 
               d: 'Finitions de haute qualité, plâtrerie, électricité, carrelage et plomberie.', 
               i: '🛠️',
-              url: '/expertises/second-oeuvre'
+              url: '/expertises/seconde-oeuvre'
             },
             { 
               t: 'Rénovation', 
