@@ -1,194 +1,421 @@
 'use client';
 
 import Link from 'next/link';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-export default function Renovation() {
-  const primaryColor = '#FFD700'; 
-  const darkColor = '#212121';    
-  const lightGrey = '#f9f9f9';
+export default function Home() {
+  const primaryColor = '#FFD700'; // Jaune BTP
+  const darkColor = '#212121';    // Anthracite
+  const lightGrey = '#f4f4f4';
+
+  // 1. CONFIGURATION DU SLIDER HERO
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      type: 'image',
+      src: "/gros-oeuvre.jpg",
+      title: "L'EXPERTISE DU GROS ŒUVRE",
+      sub: "Des fondations solides pour vos projets au Mali."
+    },
+    {
+      type: 'video',
+      src: "/video-1.mp4",
+      title: "FINITIONS DE HAUTE QUALITÉ",
+      sub: "L'esthétique et le confort sans aucun compromis."
+    },
+    {
+      type: 'image',
+      src: "/renovation-modernisation.jpg",
+      title: "RÉNOVATION & MODERNISATION",
+      sub: "Valorisez votre patrimoine immobilier à distance."
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000); // Changement toutes les 5 secondes
+    return () => clearInterval(timer);
+  }, [slides.length]);
 
   return (
-    <main style={{ fontFamily: 'Arial, sans-serif', backgroundColor: 'white', color: darkColor, minHeight: '100vh', overflowX: 'hidden' }}>
+    <main style={{ fontFamily: 'Arial, sans-serif', backgroundColor: 'white', overflowX: 'hidden' }}>
       
       {/* =========================================================
-          STYLES RESPONSIFS (ORDINATEUR, TABLETTE, MOBILE)
+          STYLES RESPONSIVES ET ANIMATIONS CSS
           ========================================================= */}
-      <style>{`
-        /* 💻 DESIGN PAR DÉFAUT : ORDINATEURS DE BUREAU */
-        .container { 
-          padding: 60px 10%; 
-          max-width: 1400px;
-          margin: 0 auto;
-          box-sizing: border-box;
-        }
-        .flex-layout { 
-          display: flex; 
-          gap: 50px; 
-          margin-top: 40px; 
-        }
-        .main-content { 
-          flex: 2; 
-        }
-        .sidebar { 
-          flex: 1; 
-          background-color: ${lightGrey}; 
-          padding: 35px; 
-          border-radius: 8px; 
-          border-top: 5px solid ${primaryColor}; 
-          height: fit-content; 
-          box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
-        }
-        .point-item { 
-          margin-bottom: 25px; 
-          padding-left: 15px; 
-          border-left: 3px solid ${primaryColor}; 
-        }
-        .point-title { 
-          font-size: 1.2rem; 
-          color: ${darkColor}; 
-          margin: 0 0 5px 0; 
-          font-weight: bold; 
-        }
-        .btn-action { 
-          background-color: ${primaryColor}; 
-          color: ${darkColor}; 
-          border: none; 
-          padding: 16px 35px; 
-          font-weight: 900; 
-          font-size: 1rem; 
-          cursor: pointer; 
-          text-transform: uppercase; 
-          border-radius: 4px; 
-          box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-          width: 100%; 
-          transition: 0.3s ease; 
-        }
-        .btn-action:hover { 
-          background-color: ${darkColor}; 
-          color: white; 
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes kenBurnsEffect {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.06); }
+          100% { transform: scale(1); }
         }
 
-        /* 📑 DESIGN INTERMÉDIAIRE : TABLETTES (Écrans de 769px à 1100px) */
-        @media (max-width: 1100px) {
-          .container { 
-            padding: 50px 6% !important; 
-          }
-          .flex-layout { 
-            gap: 30px; 
-          }
-          .sidebar {
-            padding: 25px;
-          }
-          .hero-section h1 {
-            font-size: 2.3rem !important;
-          }
+        .animate-fade { animation: fadeIn 1s ease-out forwards; }
+        .animate-slide { opacity: 0; animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        .zoom-background { animation: kenBurnsEffect 20s ease-in-out infinite; }
+        
+        .section-padding { padding: 80px 10%; }
+        .hero-title { font-size: 3.8rem; text-align: center; color: white; line-height: 1.1; font-weight: 900; text-transform: uppercase; }
+        .section-title { text-align: center !important; font-size: 2.5rem; font-weight: 900; text-transform: uppercase; margin-bottom: 50px; color: ${darkColor}; }
+        
+        .grid-services { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .grid-diaspora { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 50px; align-items: center; }
+        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center; }
+        .grid-conformite { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .grid-projets { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .grid-temoignages { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+        .service-card {
+          background-color: white; padding: 30px; border-radius: 4px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+          border-top: 5px solid ${primaryColor}; text-decoration: none; display: block;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.12); }
+
+        .projet-card {
+          position: relative; height: 350px; border-radius: 6px; overflow: hidden;
+          box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: transform 0.3s ease;
+        }
+        .projet-card:hover { transform: scale(1.02); }
+        .projet-overlay {
+          position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px 20px;
+          background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white;
         }
 
-        /* 📱 DESIGN EXTRÊME : SMARTPHONES (Écrans de 768px et moins) */
+        .conformite-card {
+          background: #fdfdfd; padding: 25px; border-radius: 6px; border: 1px solid #eef2f3;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: 0.3s;
+        }
+        .conformite-card:hover { border-color: ${primaryColor}; background: white; }
+
+        .card-temoignage {
+          background: white; padding: 30px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+          border-left: 4px solid ${primaryColor};
+        }
+
         @media (max-width: 768px) {
-          .container { 
-            padding: 40px 5% !important; 
-          }
-          .flex-layout { 
-            flex-direction: column; /* Aligne le contenu et la sidebar verticalement */
-            gap: 40px; 
-          }
-          .main-content {
-            order: 1; /* Conserve le contenu principal en haut */
-          }
-          .sidebar { 
-            order: 2; /* Glisse le bloc de garantie de la diaspora en dessous */
-            width: 100%;
-            box-sizing: border-box;
-          }
-          .hero-section {
-            padding: 60px 20px !important;
-          }
-          .hero-section h1 { 
-            font-size: 1.8rem !important; 
-            line-height: 1.3;
-          }
-          .hero-section p {
-            font-size: 1rem !important;
-          }
-          .point-title {
-            font-size: 1.1rem;
-          }
+          .section-padding { padding: 50px 5% !important; }
+          .hero-title { font-size: 2.1rem !important; }
+          .btn-responsive { width: 100% !important; max-width: none !important; }
+          .grid-diaspora .diaspora-video-container { grid-row: 1; margin-bottom: 20px; }
         }
-      `}</style>
+      ` }} />
 
       {/* =========================================================
-          BANNÈRE DE L'EXPERTISE (HERO)
+          1. SECTION HERO AVEC ARRIÈRE-PLAN MIXTE
           ========================================================= */}
-      <section className="hero-section" style={{ backgroundColor: darkColor, color: 'white', padding: '80px 5%', textAlign: 'center', borderBottom: `4px solid ${primaryColor}` }}>
-        <div style={{ fontSize: '3.5rem', marginBottom: '15px' }}>🏠</div>
-        <h1 style={{ fontSize: '2.8rem', margin: 0, fontWeight: '900', textTransform: 'uppercase' }}>
-          Rénovation & Extension
-        </h1>
-        <p style={{ color: primaryColor, marginTop: '12px', fontSize: '1.2rem', fontWeight: 'bold' }}>
-          Donnez une seconde vie et valorisez vos biens immobiliers
-        </p>
+      <section style={{
+        position: 'relative',
+        minHeight: '85vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: darkColor,
+        overflow: 'hidden'
+      }}>
+        
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, overflow: 'hidden' }}>
+          {slides.map((s, index) => (
+            <div
+              key={`slide-media-${index}`}
+              style={{
+                position: 'absolute',
+                top: 0, left: 0, width: '100%', height: '100%',
+                opacity: currentSlide === index ? 1 : 0,
+                transition: 'opacity 1.2s ease-in-out',
+              }}
+            >
+              {s.type === 'video' ? (
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                >
+                  <source src={s.src} type="video/mp4" />
+                </video>
+              ) : (
+                <div
+                  className={currentSlide === index ? "zoom-background" : ""}
+                  style={{
+                    width: '100%', height: '100%',
+                    backgroundImage: `url('${s.src}')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div style={{
+          position: 'absolute',
+          top: 0, left: 0, width: '100%', height: '100%',
+          background: 'linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.85))',
+          zIndex: 1
+        }} />
+
+        <div style={{ textAlign: 'center', padding: '0 20px', zIndex: 2, position: 'relative' }}>
+          <h2 className="hero-title animate-slide" key={`title-${currentSlide}`} style={{ maxWidth: '1000px', marginBottom: '15px' }}>
+            {slides[currentSlide].title}
+          </h2>
+          <p className="animate-slide" key={`sub-${currentSlide}`} style={{ fontSize: '1.4rem', color: primaryColor, fontWeight: 'bold', marginBottom: '35px', animationDelay: '0.2s' }}>
+            {slides[currentSlide].sub}
+          </p>
+          
+          <Link href="/contact" style={{ textDecoration: 'none' }}>
+            <button className="btn-responsive" style={{
+              backgroundColor: primaryColor, color: darkColor, padding: '18px 45px', border: 'none',
+              fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer', textTransform: 'uppercase',
+              borderRadius: '4px', boxShadow: '0 4px 15px rgba(0,0,0,0.4)', transition: '0.3s'
+            }}>
+              Démarrer mon projet
+            </button>
+          </Link>
+        </div>
+
+        <div style={{ position: 'absolute', bottom: '30px', display: 'flex', gap: '10px', zIndex: 3 }}>
+          {slides.map((_, i) => (
+            <div key={`dot-${i}`} onClick={() => setCurrentSlide(i)} style={{
+              width: '12px', height: '12px', borderRadius: '50%', 
+              backgroundColor: currentSlide === i ? primaryColor : 'rgba(255,255,255,0.4)',
+              cursor: 'pointer', transition: '0.3s'
+            }} />
+          ))}
+        </div>
       </section>
 
       {/* =========================================================
-          ZONE DE CONTENU
+          2. SECTION SERVICES
           ========================================================= */}
-      <div className="container">
-        <Link href="/" style={{ color: '#666', textDecoration: 'none', fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '5px', marginBottom: '30px', fontWeight: 'bold' }}>
-          ➔ Retour à l'accueil
-        </Link>
+      <section id="services" className="section-padding" style={{ backgroundColor: lightGrey }}>
+        <h3 className="section-title">
+          Nos <span style={{ color: primaryColor, backgroundColor: darkColor, padding: '0 15px' }}>Services</span>
+        </h3>
+        
+        <div className="grid-services">
+          {[
+            { t: 'Gros Œuvre', d: 'Construction de structures robustes, fondations et élévations aux normes.', i: '🏗️', url: '/expertises/gros-oeuvre' },
+            { t: 'Second Œuvre', d: 'Finitions de haute qualité, plâtrerie, électricité et carrelage premium.', i: '🛠️', url: '/expertises/seconde-oeuvre' },
+            { t: 'Rénovation', d: 'Modernisation, extension et valorisation de vos bâtiments existants.', i: '🏠', url: '/expertises/renovation' }
+          ].map((s, idx) => (
+            <Link href={s.url} key={`service-${idx}`} style={{ textDecoration: 'none' }}>
+              <div className="service-card animate-slide" style={{ animationDelay: `${0.2 * idx}s` }}>
+                <div style={{ fontSize: '2.5rem', marginBottom: '15px' }}>{s.i}</div>
+                <h4 style={{ fontSize: '1.4rem', marginBottom: '10px', color: darkColor, fontWeight: 'bold' }}>{s.t}</h4>
+                <p style={{ color: '#666', lineHeight: '1.6', fontSize: '0.95rem' }}>{s.d}</p>
+                <div style={{ marginTop: '20px', color: darkColor, fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  En savoir plus <span style={{ color: primaryColor }}>➔</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
 
-        <div className="flex-layout">
-          {/* Bloc de Gauche */}
-          <div className="main-content">
-            <h2 style={{ fontSize: '1.8rem', fontWeight: '900', marginBottom: '20px', textTransform: 'uppercase' }}>
-              Notre Approche Technique
-            </h2>
-            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#444', marginBottom: '40px', textAlign: 'justify' }}>
-              Que ce soit pour moderniser une ancienne concession familiale, redistribuer les volumes d'une maison ou surélever un bâtiment existant afin de générer des revenus locatifs stratégiques, notre équipe d'ingénieurs sécurise votre investissement.
-            </p>
-
-            <h3 style={{ fontSize: '1.4rem', fontWeight: '900', marginBottom: '25px', textTransform: 'uppercase' }}>
-              Savoir-faire & Spécifications
+      {/* =========================================================
+          3. SECTION CONFIANCE DIASPORA (CORRIGÉE AVEC HOVER & VIDÉO)
+          ========================================================= */}
+      <section className="section-padding" style={{ backgroundColor: 'white' }}>
+        <div className="grid-diaspora">
+          <div>
+            <span style={{ color: '#888', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Votre partenaire de confiance</span>
+            <h3 style={{ fontSize: '2.3rem', color: darkColor, marginTop: '10px', marginBottom: '20px', fontWeight: '900', lineHeight: '1.2' }}>
+              CONSTRUISEZ AU MALI DEPUIS L'ÉTRANGER
             </h3>
-            
-            <div>
-              <div className="point-item">
-                <h4 className="point-title">Audit structurel complet</h4>
-                <p style={{ margin: 0, color: '#555', lineHeight: '1.6' }}>
-                  Analyse mécanique de la solidité des poteaux et des fondations existantes avant toute surélévation (R+1, R+2, etc.).
-                </p>
-              </div>
-              <div className="point-item">
-                <h4 className="point-title">Modernisation des façades</h4>
-                <p style={{ margin: 0, color: '#555', lineHeight: '1.6' }}>
-                  Remplacement des anciens enduits par des peintures hydrofuges modernes ou des plaquettes de parement en pierre.
-                </p>
-              </div>
-              <div className="point-item">
-                <h4 className="point-title">Réaménagement intelligent</h4>
-                <p style={{ margin: 0, color: '#555', lineHeight: '1.6' }}>
-                  Optimisation complète des espaces intérieurs pour maximiser la lumière naturelle, la ventilation et le confort thermique.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Bloc de Droite (Sidebar) */}
-          <div className="sidebar">
-            <h3 style={{ margin: '0 0 15px 0', fontSize: '1.3rem', fontWeight: '900', textTransform: 'uppercase' }}>
-              🔒 Garantie Sécurité Diaspora
-            </h3>
-            <p style={{ color: '#555', lineHeight: '1.7', fontSize: '0.95rem', marginBottom: '30px', textAlign: 'justify' }}>
-              Un état des lieux avant-travaux rigoureux est effectué. Nous vous proposons un planning de livraison précis avec des pénalités de retard claires inscrites dans le contrat de rénovation.
+            <p style={{ lineHeight: '1.8', color: '#555', fontSize: '1.05rem', marginBottom: '30px' }}>
+              Setra Groupe sécurise vos investissements au pays. Nous offrons une transparence totale avec des rapports de chantier digitaux réguliers et un respect strict des budgets et des délais. Plus besoin de vous inquiéter pour le suivi de vos travaux.
             </p>
-            <Link href="/contact" style={{ textDecoration: 'none' }}>
-              <button className="btn-action">Lancer mon étude en ligne</button>
+            <Link href="/rdv-ingenieur" style={{ textDecoration: 'none' }}>
+              <button 
+                className="btn-responsive" 
+                style={{ 
+                  backgroundColor: darkColor, 
+                  color: 'white', 
+                  padding: '15px 35px', 
+                  border: `2px solid ${darkColor}`, 
+                  fontWeight: 'bold', 
+                  cursor: 'pointer', 
+                  textTransform: 'uppercase', 
+                  borderRadius: '4px',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => { 
+                  e.currentTarget.style.backgroundColor = 'transparent'; 
+                  e.currentTarget.style.color = darkColor; 
+                }}
+                onMouseOut={(e) => { 
+                  e.currentTarget.style.backgroundColor = darkColor; 
+                  e.currentTarget.style.color = 'white'; 
+                }}
+              >
+                Discuter avec un ingénieur
+              </button>
             </Link>
           </div>
+          
+          <div className="diaspora-video-container" style={{ 
+            position: 'relative',
+            height: '400px', 
+            borderRadius: '8px',
+            overflow: 'hidden',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+          }}>
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            >
+              <source src="/video-2.mp4" type="video/mp4" />
+              Votre navigateur ne supporte pas les vidéos HTML5.
+            </video>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* =========================================================
+          4. SECTION CHIFFRES CLÉS & ENGAGEMENTS
+          ========================================================= */}
+      <section className="section-padding" style={{ backgroundColor: darkColor, color: 'white' }}>
+        <div className="grid-stats">
+          {[
+            { v: '100%', t: 'Transparence', d: 'Photos et vidéos régulières de votre chantier.' },
+            { v: '0', t: 'Frais Cachés', d: 'Un devis clair, précis et respecté de A à Z.' },
+            { v: 'N°1', t: 'Sérénité', d: 'Conçu spécialement pour la diaspora malienne.' },
+            { v: 'Garantie', t: 'Décennale', d: 'Des structures construites pour durer des générations.' }
+          ].map((st, idx) => (
+            <div key={`stat-${idx}`}>
+              <div style={{ fontSize: '3rem', fontWeight: '900', color: primaryColor, marginBottom: '5px' }}>{st.v}</div>
+              <h4 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px', textTransform: 'uppercase' }}>{st.t}</h4>
+              <p style={{ color: '#aaa', fontSize: '0.9rem', lineHeight: '1.5' }}>{st.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* =========================================================
+          5. SECTION OUTILS DE CONFORMITÉ
+          ========================================================= */}
+      <section className="section-padding" style={{ backgroundColor: 'white' }}>
+        <h3 className="section-title">
+          Outils & <span style={{ color: primaryColor, backgroundColor: darkColor, padding: '0 15px' }}>Conformité</span>
+        </h3>
+        <p style={{ textAlign: 'center', color: '#666', maxWidth: '700px', margin: '-30px auto 50px', lineHeight: '1.6' }}>
+          Nous appliquons des processus technologiques et d'ingénierie rigoureux pour garantir le contrôle absolu de la qualité et de vos budgets.
+        </p>
+        <div className="grid-conformite" style={{ marginBottom: '50px' }}>
+          {[
+            { t: "Suivi Vidéo en Direct", d: "Accédez à un espace client sécurisé pour regarder l'évolution de vos travaux en photo et vidéo chaque semaine.", i: "📱" },
+            { t: "Étude Géotechnique", d: "Analyse approfondie du sol malien avant toute construction pour dimensionner parfaitement les fondations.", i: "🔬" },
+            { t: "Plans d'Exécution Béton", d: "Calculs de structures d'ingénierie précis validés par un bureau de contrôle agréé pour éviter toute fissure.", i: "📐" },
+            { t: "Gestion Budgétaire Fixe", d: "Signature d'un contrat à prix ferme non révisable. Ce qui est écrit est ce que vous payez.", i: "🔒" }
+          ].map((conf, idx) => (
+            <div key={`conf-${idx}`} className="conformite-card">
+              <div style={{ fontSize: '2.2rem', marginBottom: '15px' }}>{conf.i}</div>
+              <h4 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px', color: darkColor }}>{conf.t}</h4>
+              <p style={{ color: '#666', fontSize: '0.9rem', lineHeight: '1.6' }}>{conf.d}</p>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ textAlign: 'center' }}>
+          <Link href="/verificateur-conformite" style={{ textDecoration: 'none' }}>
+            <button 
+              className="btn-responsive" 
+              style={{
+                backgroundColor: darkColor, color: 'white', padding: '16px 40px', border: `2px solid ${darkColor}`,
+                fontWeight: 'bold', fontSize: '1.05rem', cursor: 'pointer', textTransform: 'uppercase',
+                borderRadius: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', transition: '0.3s'
+              }}
+              onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = darkColor; }}
+              onMouseOut={(e) => { e.currentTarget.style.backgroundColor = darkColor; e.currentTarget.style.color = 'white'; }}
+            >
+              ⚙️ Vérifier ma conformité
+            </button>
+          </Link>
+        </div>
+      </section>
+
+      {/* =========================================================
+          6. SECTION RÉALISATIONS PROJETS
+          ========================================================= */}
+      <section id="projets" className="section-padding" style={{ backgroundColor: lightGrey }}>
+        <h3 className="section-title">
+          Nos Dernières <span style={{ color: primaryColor, backgroundColor: darkColor, padding: '0 15px' }}>Réalisations</span>
+        </h3>
+        
+        <div className="grid-projets">
+          {[
+            { t: 'Immeuble Résidentiel R+4', l: 'ACI 2000, Bamako', img: '/gros-oeuvre.jpg' },
+            { t: 'Villa Duplex Moderne', l: 'Sotuba, Bamako', img: '/finition-de-haut-qualite.jpg' },
+            { t: 'Rénovation de Villa Luxe', l: 'Baco-Djicoroni, Bamako', img: '/renovation-modernisation.jpg' }
+          ].map((proj, idx) => (
+            <div key={`project-${idx}`} className="projet-card" style={{ backgroundImage: `url('${proj.img}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+              <div className="projet-overlay">
+                <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: primaryColor, fontWeight: 'bold', letterSpacing: '1px' }}>{proj.l}</span>
+                <h4 style={{ fontSize: '1.3rem', fontWeight: 'bold', marginTop: '5px' }}>{proj.t}</h4>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* =========================================================
+          7. SECTION TÉMOIGNAGES CLIENTS
+          ========================================================= */}
+      <section className="section-padding" style={{ backgroundColor: 'white' }}>
+        <h3 className="section-title">
+          Ils nous font <span style={{ color: primaryColor, backgroundColor: darkColor, padding: '0 15px' }}>Confiance</span>
+        </h3>
+        
+        <div className="grid-temoignages">
+          {[
+            { n: 'Amadou Diarra', p: 'Résident en France (Paris)', t: '« Grâce à Setra Groupe, j’ai pu construire ma villa à Sotuba sans me déplacer. Les rapports hebdomadaires m’ont donné une tranquillité d’esprit totale. Je recommande les yeux fermés ! »' },
+            { n: 'Fatoumata Traoré', p: 'Résidente aux USA (New York)', t: '« Le plus dur quand on vit à l’étranger, c’est la confiance. Avec Setra, tout est carré. Le devis a été respecté et les finitions sont magnifiques, dignes des standards internationaux. »' }
+          ].map((tem, idx) => (
+            <div key={`testi-${idx}`} className="card-temoignage">
+              <p style={{ fontStyle: 'italic', color: '#444', lineHeight: '1.6', marginBottom: '20px', fontSize: '1rem' }}>{tem.t}</p>
+              <div>
+                <strong style={{ color: darkColor, display: 'block', fontSize: '1.1rem' }}>{tem.n}</strong>
+                <span style={{ color: '#777', fontSize: '0.85rem' }}>{tem.p}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* =========================================================
+          8. FOOTER APPEL À L'ACTION
+          ========================================================= */}
+      <section className="section-padding" style={{ backgroundColor: darkColor, textAlign: 'center', borderTop: `5px solid ${primaryColor}` }}>
+        <h3 style={{ color: 'white', fontSize: '2.5rem', fontWeight: '900', marginBottom: '20px' }}>
+          PRÊT À RÉALISER VOTRE PROJET ?
+        </h3>
+        <p style={{ color: '#aaa', marginBottom: '40px', maxWidth: '700px', margin: '0 auto 40px' }}>
+          Obtenez une étude technique et budgétaire détaillée pour votre construction au Mali.
+        </p>
+        <Link href="/contact" style={{ textDecoration: 'none' }}>
+          <button className="btn-responsive" style={{
+            backgroundColor: primaryColor, color: darkColor, padding: '18px 45px', border: 'none',
+            fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px'
+          }}>
+            Demander un devis gratuit
+          </button>
+        </Link>
+      </section>
+
     </main>
   );
 }
