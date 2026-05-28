@@ -20,7 +20,7 @@ export default function Home() {
     },
     {
       type: 'video',
-      src: "/video-1.mp4", // Place ta vidéo animée ici dans le dossier public/
+      src: "/video-1.mp4",
       title: "FINITIONS DE HAUTE QUALITÉ",
       sub: "L'esthétique et le confort sans aucun compromis."
     },
@@ -43,9 +43,9 @@ export default function Home() {
     <main style={{ fontFamily: 'Arial, sans-serif', backgroundColor: 'white', overflowX: 'hidden' }}>
       
       {/* =========================================================
-          STYLES RESPONSIVES ET ANIMATIONS CSS
+          STYLES RESPONSIVES ET ANIMATIONS CSS (CORRIGÉS)
           ========================================================= */}
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -103,12 +103,12 @@ export default function Home() {
           .section-padding { padding: 50px 5% !important; }
           .hero-title { font-size: 2.1rem !important; }
           .btn-responsive { width: 100% !important; max-width: none !important; }
-          .grid-diaspora .diaspora-img { grid-row: 1; margin-bottom: 20px; }
+          .grid-diaspora .diaspora-video-container { grid-row: 1; margin-bottom: 20px; }
         }
-      `}</style>
+      ` }} />
 
       {/* =========================================================
-          1. SECTION HERO AVEC ARRIÈRE-PLAN MIXTE (IMAGE / VIDÉO DYNAMIQUE)
+          1. SECTION HERO AVEC ARRIÈRE-PLAN MIXTE
           ========================================================= */}
       <section style={{
         position: 'relative',
@@ -121,11 +121,10 @@ export default function Home() {
         overflow: 'hidden'
       }}>
         
-        {/* Conteneur des médias de fond */}
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, overflow: 'hidden' }}>
           {slides.map((s, index) => (
             <div
-              key={index}
+              key={`slide-media-${index}`}
               style={{
                 position: 'absolute',
                 top: 0, left: 0, width: '100%', height: '100%',
@@ -134,7 +133,6 @@ export default function Home() {
               }}
             >
               {s.type === 'video' ? (
-                // Rendu Vidéo pour la finition haute qualité
                 <video
                   autoPlay
                   loop
@@ -145,7 +143,6 @@ export default function Home() {
                   <source src={s.src} type="video/mp4" />
                 </video>
               ) : (
-                // Rendu Image classique avec effet Zoom léger pour les autres slides
                 <div
                   className={currentSlide === index ? "zoom-background" : ""}
                   style={{
@@ -160,7 +157,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Overlay d'assombrissement global pour la lisibilité */}
         <div style={{
           position: 'absolute',
           top: 0, left: 0, width: '100%', height: '100%',
@@ -168,7 +164,6 @@ export default function Home() {
           zIndex: 1
         }} />
 
-        {/* Texte du Hero */}
         <div style={{ textAlign: 'center', padding: '0 20px', zIndex: 2, position: 'relative' }}>
           <h2 className="hero-title animate-slide" key={`title-${currentSlide}`} style={{ maxWidth: '1000px', marginBottom: '15px' }}>
             {slides[currentSlide].title}
@@ -177,7 +172,7 @@ export default function Home() {
             {slides[currentSlide].sub}
           </p>
           
-          <Link href="/contact" className="animate-slide" style={{ textDecoration: 'none', animationDelay: '0.4s' }}>
+          <Link href="/contact" style={{ textDecoration: 'none' }}>
             <button className="btn-responsive" style={{
               backgroundColor: primaryColor, color: darkColor, padding: '18px 45px', border: 'none',
               fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer', textTransform: 'uppercase',
@@ -188,10 +183,9 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* Indicateurs (Dots) */}
         <div style={{ position: 'absolute', bottom: '30px', display: 'flex', gap: '10px', zIndex: 3 }}>
           {slides.map((_, i) => (
-            <div key={i} onClick={() => setCurrentSlide(i)} style={{
+            <div key={`dot-${i}`} onClick={() => setCurrentSlide(i)} style={{
               width: '12px', height: '12px', borderRadius: '50%', 
               backgroundColor: currentSlide === i ? primaryColor : 'rgba(255,255,255,0.4)',
               cursor: 'pointer', transition: '0.3s'
@@ -214,7 +208,7 @@ export default function Home() {
             { t: 'Second Œuvre', d: 'Finitions de haute qualité, plâtrerie, électricité et carrelage premium.', i: '🛠️', url: '/expertises/seconde-oeuvre' },
             { t: 'Rénovation', d: 'Modernisation, extension et valorisation de vos bâtiments existants.', i: '🏠', url: '/expertises/renovation' }
           ].map((s, idx) => (
-            <Link href={s.url} key={idx} style={{ textDecoration: 'none' }}>
+            <Link href={s.url} key={`service-${idx}`} style={{ textDecoration: 'none' }}>
               <div className="service-card animate-slide" style={{ animationDelay: `${0.2 * idx}s` }}>
                 <div style={{ fontSize: '2.5rem', marginBottom: '15px' }}>{s.i}</div>
                 <h4 style={{ fontSize: '1.4rem', marginBottom: '10px', color: darkColor, fontWeight: 'bold' }}>{s.t}</h4>
@@ -229,9 +223,9 @@ export default function Home() {
       </section>
 
       {/* =========================================================
-          3. SECTION CONFIANCE DIASPORA
+          3. SECTION CONFIANCE DIASPORA (CORRIGÉE HOVER + VIDÉO)
           ========================================================= */}
-      <section className="section-padding">
+      <section className="section-padding" style={{ backgroundColor: 'white' }}>
         <div className="grid-diaspora">
           <div>
             <span style={{ color: '#888', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Votre partenaire de confiance</span>
@@ -239,22 +233,55 @@ export default function Home() {
               CONSTRUISEZ AU MALI DEPUIS L'ÉTRANGER
             </h3>
             <p style={{ lineHeight: '1.8', color: '#555', fontSize: '1.05rem', marginBottom: '30px' }}>
-              Setra Groupe sécurise vos investissements au pays. Nous offrons une transparence totale avec des rapports de chantier digitaux réguliers et un respect strict des budgets et des délais. Plus besoin de vous inquiéter pour le suivi de vos travaux.
+              Setra Groupe sécurise vos investissements au pays. Nous offerons une transparence totale avec des rapports de chantier digitaux réguliers et un respect strict des budgets et des délais. Plus besoin de vous inquiéter pour le suivi de vos travaux.
             </p>
             <Link href="/rdv-ingenieur" style={{ textDecoration: 'none' }}>
-              <button className="btn-responsive" style={{ backgroundColor: darkColor, color: 'white', padding: '15px 35px', border: 'none', fontWeight: 'bold', cursor: 'pointer', textTransform: 'uppercase', borderRadius: '4px' }}>
+              <button 
+                className="btn-responsive" 
+                style={{ 
+                  backgroundColor: darkColor, 
+                  color: 'white', 
+                  padding: '15px 35px', 
+                  border: `2px solid ${darkColor}`, 
+                  fontWeight: 'bold', 
+                  cursor: 'pointer', 
+                  textTransform: 'uppercase', 
+                  borderRadius: '4px',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => { 
+                  e.currentTarget.style.backgroundColor = 'transparent'; 
+                  e.currentTarget.style.color = darkColor; 
+                }}
+                onMouseOut={(e) => { 
+                  e.currentTarget.style.backgroundColor = darkColor; 
+                  e.currentTarget.style.color = 'white'; 
+                }}
+              >
                 Discuter avec un ingénieur
               </button>
             </Link>
           </div>
-          <div className="diaspora-img" style={{ 
+          
+          <div className="diaspora-video-container" style={{ 
+            position: 'relative',
             height: '400px', 
-            backgroundImage: "url('/gros-oeuvre.jpg')", 
-            backgroundSize: 'cover', 
-            backgroundPosition: 'center', 
             borderRadius: '8px',
+            overflow: 'hidden',
             boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-          }}></div>
+          }}>
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            >
+              <source src="/video-2.mp4" type="video/mp4" />
+              Votre navigateur ne supporte pas les vidéos HTML5.
+            </video>
+          </div>
         </div>
       </section>
 
@@ -269,7 +296,7 @@ export default function Home() {
             { v: 'N°1', t: 'Sérénité', d: 'Conçu spécialement pour la diaspora malienne.' },
             { v: 'Garantie', t: 'Décennale', d: 'Des structures construites pour durer des générations.' }
           ].map((st, idx) => (
-            <div key={idx}>
+            <div key={`stat-${idx}`}>
               <div style={{ fontSize: '3rem', fontWeight: '900', color: primaryColor, marginBottom: '5px' }}>{st.v}</div>
               <h4 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px', textTransform: 'uppercase' }}>{st.t}</h4>
               <p style={{ color: '#aaa', fontSize: '0.9rem', lineHeight: '1.5' }}>{st.d}</p>
@@ -295,7 +322,7 @@ export default function Home() {
             { t: "Plans d'Exécution Béton", d: "Calculs de structures d'ingénierie précis validés par un bureau de contrôle agréé pour éviter toute fissure.", i: "📐" },
             { t: "Gestion Budgétaire Fixe", d: "Signature d'un contrat à prix ferme non révisable. Ce qui est écrit est ce que vous payez.", i: "🔒" }
           ].map((conf, idx) => (
-            <div key={idx} className="conformite-card">
+            <div key={`conf-${idx}`} className="conformite-card">
               <div style={{ fontSize: '2.2rem', marginBottom: '15px' }}>{conf.i}</div>
               <h4 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px', color: darkColor }}>{conf.t}</h4>
               <p style={{ color: '#666', fontSize: '0.9rem', lineHeight: '1.6' }}>{conf.d}</p>
@@ -303,16 +330,18 @@ export default function Home() {
           ))}
         </div>
 
-        {/* BOUTON VÉRIFICATEUR DE CONFORMITÉ */}
         <div style={{ textAlign: 'center' }}>
           <Link href="/verificateur-conformite" style={{ textDecoration: 'none' }}>
-            <button className="btn-responsive" style={{
-              backgroundColor: darkColor, color: 'white', padding: '16px 40px', border: `2px solid ${darkColor}`,
-              fontWeight: 'bold', fontSize: '1.05rem', cursor: 'pointer', textTransform: 'uppercase',
-              borderRadius: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', transition: '0.3s'
-            }}
-            onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = darkColor; }}
-            onMouseOut={(e) => { e.currentTarget.style.backgroundColor = darkColor; e.currentTarget.style.color = 'white'; }}>
+            <button 
+              className="btn-responsive" 
+              style={{
+                backgroundColor: darkColor, color: 'white', padding: '16px 40px', border: `2px solid ${darkColor}`,
+                fontWeight: 'bold', fontSize: '1.05rem', cursor: 'pointer', textTransform: 'uppercase',
+                borderRadius: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', transition: '0.3s'
+              }}
+              onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = darkColor; }}
+              onMouseOut={(e) => { e.currentTarget.style.backgroundColor = darkColor; e.currentTarget.style.color = 'white'; }}
+            >
               ⚙️ Vérifier ma conformité
             </button>
           </Link>
@@ -329,11 +358,11 @@ export default function Home() {
         
         <div className="grid-projets">
           {[
-            { t: 'Immeuble Résidentiel R+4', l: 'ACI 2000, Bamako', img: '/gros-oeuvre.jpg' },
-            { t: 'Villa Duplex Moderne', l: 'Sotuba, Bamako', img: '/finition-de-haut-qualite.jpg' },
-            { t: 'Rénovation de Villa Luxe', l: 'Baco-Djicoroni, Bamako', img: '/renovation-modernisation.jpg' }
+            { t: 'Immeuble Résidentiel R+4', l: 'ACI 2000, Bamako', img: '/villa s.jpg' },
+            { t: 'Villa Duplex Moderne', l: 'Sotuba, Bamako', img: '/villa.jpg' },
+            { t: 'Rénovation de Villa Luxe', l: 'Baco-Djicoroni, Bamako', img: '/s3.jpg' }
           ].map((proj, idx) => (
-            <div key={idx} className="projet-card" style={{ backgroundImage: `url('${proj.img}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+            <div key={`project-${idx}`} className="projet-card" style={{ backgroundImage: `url('${proj.img}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
               <div className="projet-overlay">
                 <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: primaryColor, fontWeight: 'bold', letterSpacing: '1px' }}>{proj.l}</span>
                 <h4 style={{ fontSize: '1.3rem', fontWeight: 'bold', marginTop: '5px' }}>{proj.t}</h4>
@@ -356,7 +385,7 @@ export default function Home() {
             { n: 'Amadou Diarra', p: 'Résident en France (Paris)', t: '« Grâce à Setra Groupe, j’ai pu construire ma villa à Sotuba sans me déplacer. Les rapports hebdomadaires m’ont donné une tranquillité d’esprit totale. Je recommande les yeux fermés ! »' },
             { n: 'Fatoumata Traoré', p: 'Résidente aux USA (New York)', t: '« Le plus dur quand on vit à l’étranger, c’est la confiance. Avec Setra, tout est carré. Le devis a été respecté et les finitions sont magnifiques, dignes des standards internationaux. »' }
           ].map((tem, idx) => (
-            <div key={idx} className="card-temoignage">
+            <div key={`testi-${idx}`} className="card-temoignage">
               <p style={{ fontStyle: 'italic', color: '#444', lineHeight: '1.6', marginBottom: '20px', fontSize: '1rem' }}>{tem.t}</p>
               <div>
                 <strong style={{ color: darkColor, display: 'block', fontSize: '1.1rem' }}>{tem.n}</strong>

@@ -358,9 +358,9 @@ export default function Home() {
         
         <div className="grid-projets">
           {[
-            { t: 'Immeuble Résidentiel R+4', l: 'ACI 2000, Bamako', img: '/gros-oeuvre.jpg' },
-            { t: 'Villa Duplex Moderne', l: 'Sotuba, Bamako', img: '/finition-de-haut-qualite.jpg' },
-            { t: 'Rénovation de Villa Luxe', l: 'Baco-Djicoroni, Bamako', img: '/renovation-modernisation.jpg' }
+            { t: 'Immeuble Résidentiel R+4', l: 'ACI 2000, Bamako', img: '/villa s.jpg' },
+            { t: 'Villa Duplex Moderne', l: 'Sotuba, Bamako', img: '/villa.jpg' },
+            { t: 'Rénovation de Villa Luxe', l: 'Baco-Djicoroni, Bamako', img:'/s3.jpg' }
           ].map((proj, idx) => (
             <div key={`project-${idx}`} className="projet-card" style={{ backgroundImage: `url('${proj.img}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
               <div className="projet-overlay">

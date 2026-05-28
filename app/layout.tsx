@@ -179,9 +179,9 @@ export default function RootLayout({
             {/* Colonne 3: Informations de Contact */}
             <div>
               <h3 style={{ color: 'white', marginBottom: '20px', fontSize: '1.1rem', textTransform: 'uppercase', fontWeight: 'bold' }}>Contactez-nous</h3>
-              <p style={{ color: '#aaa', fontSize: '0.95rem', marginBottom: '12px', margin: 0 }}>📍 Bamako, Mali</p>
-              <p style={{ color: '#aaa', fontSize: '0.95rem', marginBottom: '12px', margin: 0 }}>📞 +223 00 00 00 00</p>
-              <p style={{ color: '#aaa', fontSize: '0.95rem', margin: 0 }}>✉️ contact@setragroupe.ml</p>
+              <p style={{ color: '#aaa', fontSize: '0.95rem', marginBottom: '12px', margin: 0 }}>📍 Bamako, Sangarebougou-Marseille</p>
+              <p style={{ color: '#aaa', fontSize: '0.95rem', marginBottom: '12px', margin: 0 }}>📞 +223 73 02 19 84 - 62 69 75 91</p>
+              <p style={{ color: '#aaa', fontSize: '0.95rem', margin: 0 }}>✉️ </p>setraconstructionbtp@gmail.com
             </div>
           </div>
 
