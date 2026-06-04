@@ -60,12 +60,22 @@ export default function MaintenancePage() {
           color: #888;
         }
 
-        .maintenance-email {
+        .maintenance-contact-info {
           color: white;
           font-weight: bold;
           font-size: 1.05rem;
           margin-top: 8px;
-          word-break: break-all; /* Évite que l'email ne dépasse sur très petit écran */
+          word-break: break-all;
+        }
+
+        .maintenance-link {
+          color: white;
+          text-decoration: none;
+          transition: color 0.2s ease;
+        }
+
+        .maintenance-link:hover {
+          color: ${primaryColor};
         }
 
         @keyframes pulse {
@@ -107,10 +117,17 @@ export default function MaintenancePage() {
           Nous serons de retour d'ici quelques instants.
         </p>
 
-        {/* Section Contact alternative */}
+        {/* Section Contact alternative textuelle */}
         <div className="maintenance-footer">
           <p>Besoin de nous contacter de manière urgente ?</p>
-          <p className="maintenance-email">setraconstructionbtp@gmail.com</p>
+          <p className="maintenance-contact-info">
+            <a href="mailto:setraconstructionbtp@gmail.com" className="maintenance-link">
+              setraconstructionbtp@gmail.com
+            </a>
+            <span style={{ display: 'block', marginTop: '5px' }}>
+              Téléphone : <a href="tel:+223 73 02 19 84 - 62 69 75 91'" className="maintenance-link">+223 73 02 19 84 - 62 69 75 91</a>
+            </span>
+          </p>
         </div>
       </div>
       
