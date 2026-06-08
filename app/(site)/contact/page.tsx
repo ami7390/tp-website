@@ -94,12 +94,12 @@ export default function ContactPage() {
 
           <div style={{ marginBottom: '20px' }}>
             <strong style={{ display: 'block', color: darkColor }}>📞 TÉLÉPHONE</strong>
-            <p style={{ margin: '5px 0', color: '#666' }}>+223 00 00 00 00</p>
+            <p style={{ margin: '5px 0', color: '#666' }}>+223 62 69 75 91 / 73 02 19 84</p>
           </div>
 
           <div style={{ marginBottom: '20px' }}>
             <strong style={{ display: 'block', color: darkColor }}>📧 EMAIL</strong>
-            <p style={{ margin: '5px 0', color: '#666' }}>contact@setragroupe.ml</p>
+            <p style={{ margin: '5px 0', color: '#666' }}>setraconstructionbtp@gmail.com</p>
           </div>
 
           <div style={{ marginTop: '40px', padding: '20px', backgroundColor: '#fffbe6', borderRadius: '4px', border: '1px solid #ffe58f' }}>

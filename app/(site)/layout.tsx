@@ -1,4 +1,4 @@
-// Fichier : app/(site)/
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default function SiteLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   const primaryColor = '#FFD700'; // Jaune BTP
   const darkColor = '#212121';    // Anthracite
@@ -26,7 +26,7 @@ export default function SiteLayout({
         borderBottom: `4px solid ${primaryColor}`,
       }}>
         <style>{`
-          /* ======= 💻 CONFIGURATION ORDINATEUR ======= */
+          /* ======= 💻 CONFIGURATION PAR DÉFAUT (ORDINATEUR LARGE) ======= */
           .header-container {
             display: flex;
             justify-content: space-between;
@@ -68,7 +68,7 @@ export default function SiteLayout({
             margin-bottom: 40px;
           }
 
-          /* ======= 📑 ADAPTATION TABLETTE ======= */
+          /* ======= 📑 INTERMÉDIAIRE : ADAPTATION TABLETTE (769px à 1100px) ======= */
           @media (max-width: 1100px) {
             .header-container { padding: 0.8rem 5%; }
             .nav-links { gap: 20px; }
@@ -76,7 +76,7 @@ export default function SiteLayout({
             .footer-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
           }
 
-          /* ======= 📱 ADAPTATION MOBILE ======= */
+          /* ======= 📱 EXTRÊME : ADAPTATION MOBILE (768px et moins) ======= */
           @media (max-width: 768px) {
             .header-container { padding: 0.8rem 5%; }
             .burger-btn { display: block; }
@@ -131,14 +131,16 @@ export default function SiteLayout({
             <Link href="/nosservices" className="nav-link">Services</Link>
             <Link href="/apropos" className="nav-link">À Propos</Link>
             <Link href="/contact" className="nav-link">Contact</Link>
+            <Link href="/blog" className="nav-link">Blog</Link>
+  
           </nav>
         </div>
       </header>
 
-      {/* CONTENU DE VOS PAGES */}
-      <main style={{ flex: 1 }}>
+      {/* AFFICHAGE DES PAGES DU SITE (ACCUEIL, CONTACT, ETC.) */}
+      <div style={{ flex: 1 }}>
         {children}
-      </main>
+      </div>
 
       {/* =========================================================
           FOOTER TOTALEMENT RESPONSIVE
@@ -186,7 +188,7 @@ export default function SiteLayout({
         </div>
       </footer>
 
-      {/* SCRIPT BURGER MENU */}
+      {/* SCRIPT JS DYNAMIQUE POUR LE BURGER MENU */}
       <script dangerouslySetInnerHTML={{ __html: `
         const btn = document.getElementById('burger-toggle');
         const menu = document.getElementById('nav-menu');
