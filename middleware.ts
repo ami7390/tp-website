@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
   }
 
   // 2. Si le mode maintenance est STRICTEMENT à true ET qu'on n'est pas déjà sur la page, on redirige
-  if (isMaintenanceMode && pathname !== '/maintenance') {
+  if (isMaintenanceMode && pathname !== '/maintenance' && !pathname.startsWith('/blog')) {
     const url = request.nextUrl.clone();
     url.pathname = '/maintenance';
     return NextResponse.redirect(url);

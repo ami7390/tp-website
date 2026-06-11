@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 export default function SiteLayout({
@@ -12,8 +12,19 @@ export default function SiteLayout({
   const darkColor = '#212121';    // Anthracite
   const lightGrey = '#f9f9f9';
 
+  // Gestion native du menu mobile avec React
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       {/* =========================================================
           HEADER & NAVBAR RESPONSIVE INTÉGRÉE
           ========================================================= */}
@@ -35,9 +46,24 @@ export default function SiteLayout({
             max-width: 1400px;
             margin: 0 auto;
           }
+          
+          /* Style pour la zone logo cliquable */
+          .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            padding: 4px;
+          }
+          .logo-link:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px ${primaryColor};
+          }
+
           .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 25px;
             align-items: center;
           }
           .nav-link {
@@ -49,7 +75,8 @@ export default function SiteLayout({
             padding: 6px 0;
             border-bottom: 2px solid transparent;
           }
-          .nav-link:hover {
+          .nav-link:hover, .nav-link:focus {
+            outline: none;
             color: ${darkColor};
             border-bottom: 2px solid ${primaryColor};
           }
@@ -60,6 +87,12 @@ export default function SiteLayout({
             color: ${darkColor};
             font-size: 1.8rem;
             cursor: pointer;
+            border-radius: 4px;
+            padding: 2px 8px;
+          }
+          .burger-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px ${primaryColor};
           }
           .footer-grid {
             display: grid;
@@ -71,7 +104,7 @@ export default function SiteLayout({
           /* ======= 📑 INTERMÉDIAIRE : ADAPTATION TABLETTE (769px à 1100px) ======= */
           @media (max-width: 1100px) {
             .header-container { padding: 0.8rem 5%; }
-            .nav-links { gap: 20px; }
+            .nav-links { gap: 15px; }
             .nav-link { font-size: 0.95rem; }
             .footer-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
           }
@@ -96,7 +129,7 @@ export default function SiteLayout({
             }
             
             .nav-links.open {
-              display: flex !important;
+              display: flex;
             }
 
             .nav-link {
@@ -114,33 +147,42 @@ export default function SiteLayout({
         `}</style>
 
         <div className="header-container">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <img src="/logo.png" alt="Setra" style={{ height: '45px', objectFit: 'contain' }} />
+          {/* LOGO CLIQUABLE VERS L'ACCUEIL */}
+          <Link href="/" className="logo-link" aria-label="Retour à l'accueil de Setra Groupe" onClick={closeMenu}>
+            <img src="/logo.png" alt="" style={{ height: '45px', objectFit: 'contain' }} />
             <h1 style={{ margin: 0, fontSize: '1.3rem', color: darkColor, textTransform: 'uppercase', fontWeight: '900', letterSpacing: '0.5px' }}>
               Setra <span style={{ color: '#777', fontWeight: '300' }}>Groupe</span>
             </h1>
-          </div>
+          </Link>
 
-          <button id="burger-toggle" className="burger-btn" aria-label="Menu">
-            ☰
+          {/* BOUTON BURGER GÉRÉ PAR REACT */}
+          <button 
+            className="burger-btn" 
+            aria-label="Menu de navigation" 
+            aria-expanded={isMenuOpen}
+            onClick={toggleMenu}
+          >
+            {isMenuOpen ? '✕' : '☰'}
           </button>
 
-          <nav id="nav-menu" className="nav-links">
-            <Link href="/" className="nav-link">Accueil</Link>
-            <Link href="/nosrealisation" className="nav-link">Réalisations</Link>
-            <Link href="/nosservices" className="nav-link">Services</Link>
-            <Link href="/apropos" className="nav-link">À Propos</Link>
-            <Link href="/contact" className="nav-link">Contact</Link>
-            <Link href="/blog" className="nav-link">Blog</Link>
-  
+          {/* MENU DE NAVIGATION PRINCIPAL (HEADER) */}
+          <nav className={`nav-links ${isMenuOpen ? 'open' : ''}`} aria-label="Navigation principale">
+            <Link href="/" className="nav-link" onClick={closeMenu}>Accueil</Link>
+            <Link href="/nosservices" className="nav-link" onClick={closeMenu}>Services</Link>
+            <Link href="/nosrealisation" className="nav-link" onClick={closeMenu}>Réalisations</Link>
+            {/* CORRECTION DE LA ROUTE -> /ventes */}
+            <Link href="/ventes" className="nav-link" onClick={closeMenu}>Immobilier</Link>
+            <Link href="/apropos" className="nav-link" onClick={closeMenu}>À Propos</Link>
+            <Link href="/contact" className="nav-link" onClick={closeMenu}>Contact</Link>
+            <Link href="/blog" className="nav-link" onClick={closeMenu}>Blog</Link>
           </nav>
         </div>
       </header>
 
-      {/* AFFICHAGE DES PAGES DU SITE (ACCUEIL, CONTACT, ETC.) */}
-      <div style={{ flex: 1 }}>
+      {/* AFFICHAGE DES PAGES DU SITE */}
+      <main style={{ flex: 1 }}>
         {children}
-      </div>
+      </main>
 
       {/* =========================================================
           FOOTER TOTALEMENT RESPONSIVE
@@ -160,10 +202,14 @@ export default function SiteLayout({
           </div>
 
           <div>
-            <h3 style={{ color: 'white', marginBottom: '20px', fontSize: '1.1rem', textTransform: 'uppercase', fontWeight: 'bold' }}>Navigation</h3>
+            <h3 style={{ color: 'white', marginBottom: '20px', fontSize: '1.1rem', textTransform: 'uppercase', fontWeight: 'bold' }}>
+              Navigation
+            </h3>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               <li><Link href="/nosservices" style={{ color: '#aaa', textDecoration: 'none', display: 'block', marginBottom: '12px' }}>Nos Services</Link></li>
               <li><Link href="/nosrealisation" style={{ color: '#aaa', textDecoration: 'none', display: 'block', marginBottom: '12px' }}>Nos Réalisations</Link></li>
+              {/* CORRECTION DE LA ROUTE -> /ventes */}
+              <li><Link href="/ventes" style={{ color: '#aaa', textDecoration: 'none', display: 'block', marginBottom: '12px' }}>Immobilier</Link></li>
               <li><Link href="/contact" style={{ color: '#aaa', textDecoration: 'none', display: 'block', marginBottom: '12px' }}>Demander un devis</Link></li>
             </ul>
           </div>
@@ -187,24 +233,6 @@ export default function SiteLayout({
           <p style={{ margin: 0 }}>&copy; {new Date().getFullYear()} Setra Groupe SARL. Tous droits réservés.</p>
         </div>
       </footer>
-
-      {/* SCRIPT JS DYNAMIQUE POUR LE BURGER MENU */}
-      <script dangerouslySetInnerHTML={{ __html: `
-        const btn = document.getElementById('burger-toggle');
-        const menu = document.getElementById('nav-menu');
-        if (btn && menu) {
-          btn.addEventListener('click', () => {
-            menu.classList.toggle('open');
-            btn.textContent = menu.classList.contains('open') ? '✕' : '☰';
-          });
-          menu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-              menu.classList.remove('open');
-              btn.textContent = '☰';
-            });
-          });
-        }
-      `}} />
-    </>
+    </div>
   );
 }
